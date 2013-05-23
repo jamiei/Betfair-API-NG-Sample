@@ -1,0 +1,66 @@
+[{
+        "caption": "Get the number of soccer markets",
+        "methodName": "SportsAPING/v1.0/listEventTypes",
+        "params": {
+            "filter": {
+                "eventTypeIds": [
+                    1
+                ]
+            }
+        }
+},
+{
+        "caption": "Get the next horse race in the UK",
+        "methodName": "SportsAPING/v1.0/listMarketCatalogue",
+        "params": {
+            "filter": {
+                "eventTypeIds": [
+                    7
+                ],
+                "marketCountries": [
+                    "GB"
+                ],
+                "marketTypeCodes": [
+                    "WIN"
+                ],
+                "marketStartTime": {
+                    "from": "2013-04-11T11:03:36Z"
+                }
+            },
+            "sort": "FIRST_TO_START",
+            "maxResults": "1",
+            "marketProjection": [
+                "COMPETITION",
+                "EVENT",
+                "EVENT_TYPE",
+                "MARKET_DESCRIPTION",
+                "RUNNER_DESCRIPTION"
+            ]
+        }
+},
+{
+        "caption": "Get the 2 best prices, rolled up to £10 for the London Mayor Election 2016",
+        "methodName": "SportsAPING/v1.0/listMarketCatalogue",
+        "params": {
+            "marketIds": [
+                "1.107728324"
+            ],
+            "priceProjection": {
+                "priceData": [
+                    "EX_BEST_OFFERS"
+                ],
+                "exBestOffersOverrides": {
+                    "bestPricesDepth": "2",
+                    "rollupModel": "STAKE",
+                    "rollupLimit": "10"
+                }
+            }
+        }
+},
+{
+        "caption": "Get my current unmatched bets",
+        "methodName": "SportsAPING/v1.0/listCurrentOrders",
+        "params": {
+            "orderProjection": "EXECUTABLE"
+        }
+}]
