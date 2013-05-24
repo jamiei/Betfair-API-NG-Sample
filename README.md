@@ -46,10 +46,10 @@ begin
 end;
 ```
 
-[Screenshot of the Sample Tool](http://jamiei.com/blog/wp-content/uploads/2013/05/screenshot.png)
+![Screenshot of the Sample Tool](http://jamiei.com/blog/wp-content/uploads/2013/05/screenshot.png)
 
 ## Dependencies
 Due to distribution restrictions, there are a couple of dependencies that you must fulfil:
 
-[superobject](https://code.google.com/p/superobject/) - The excellent superobject library should be somewhere on your project's search path.
-[SSL DLL's](http://www.indyproject.org/sockets/SSL.EN.aspx) - Indy SSL support requires you to have the appropriate SSL DLLs on your deployment target node.
+*[superobject](https://code.google.com/p/superobject/) - The excellent superobject library should be somewhere on your project's search path.
+*[SSL DLL's](http://www.indyproject.org/sockets/SSL.EN.aspx) - Indy SSL support requires you to have the appropriate SSL DLLs on your deployment target node.
