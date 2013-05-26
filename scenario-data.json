@@ -40,7 +40,7 @@
 },
 {
         "caption": "Get the 2 best prices, rolled up to £10 for the London Mayor Election 2016",
-        "methodName": "SportsAPING/v1.0/listMarketCatalogue",
+        "methodName": "SportsAPING/v1.0/listMarketBook",
         "params": {
             "marketIds": [
                 "1.107728324"
