@@ -28,7 +28,7 @@ var
 begin
   // ##### Memory clean-up and Error handling code omitted for clarity. #####
   FEndpoints := TStringList.Create;
-  FEndpoints.Add('SportsAPING=https://beta-api.betfair.com/json-rpc');
+  FEndpoints.Add('SportsAPING=https://beta-api.betfair.com/betting/json-rpc');
   FJsonRpc := TJsonRpc.Create(FEndpoints);
 
   // Setup the Http Client
