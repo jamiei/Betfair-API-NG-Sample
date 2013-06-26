@@ -4,7 +4,9 @@ uses
   Vcl.Forms,
   uMain in 'uMain.pas' {fMain},
   uConfig in 'uConfig.pas',
-  JsonRpc in 'JsonRpc.pas';
+  JsonRpc in 'JsonRpc.pas',
+  uAuthForm in 'uAuthForm.pas' {fAuthForm},
+  AppNsHandler in 'lib\AppNsHandler.pas';
 
 {$R *.res}
 

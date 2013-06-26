@@ -69,7 +69,7 @@ object fMain: TfMain
   end
   object btnSend: TButton
     Left = 384
-    Top = 50
+    Top = 57
     Width = 97
     Height = 25
     Caption = 'Send'
@@ -108,5 +108,14 @@ object fMain: TfMain
       TabOrder = 0
       OnChange = cbScenarioChange
     end
+  end
+  object btnLogin: TButton
+    Left = 384
+    Top = 26
+    Width = 97
+    Height = 25
+    Caption = 'Login'
+    TabOrder = 6
+    OnClick = btnLoginClick
   end
 end

@@ -28,10 +28,12 @@ type
     lblMethodName: TLabel;
     gbPrepopulateInstructions: TGroupBox;
     cbScenario: TComboBox;
+    btnLogin: TButton;
     procedure btnSendClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbScenarioChange(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure btnLoginClick(Sender: TObject);
   private
     { Private declarations }
     FScenarioData: TStringList;
@@ -52,9 +54,24 @@ var
 implementation
 
 uses
-  uConfig;
+  uConfig,
+  uAuthForm;
 
 {$R *.dfm}
+
+procedure TfMain.btnLoginClick(Sender: TObject);
+var
+  fAuthForm: TfAuthForm;
+  mrAuth: TModalResult;
+begin
+  fAuthForm := TfAuthForm.Create(nil);
+  try
+    mrAuth := fAuthForm.ShowModal;
+    if mrAuth = mrOK then eSessionToken.Text := fAuthForm.SessionToken;
+  finally
+    fAuthForm.Free;
+  end;
+end;
 
 procedure TfMain.btnSendClick(Sender: TObject);
 var
