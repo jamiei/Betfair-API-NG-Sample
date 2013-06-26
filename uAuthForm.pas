@@ -90,7 +90,6 @@ begin
   if Assigned(document) then
   begin
     urlStr := document.url;
-    ShowMessage(document.url);
     cookies := TStringList.Create;
     cookies.Delimiter := ';';
     try
