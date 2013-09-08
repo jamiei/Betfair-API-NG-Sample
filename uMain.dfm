@@ -69,7 +69,7 @@ object fMain: TfMain
   end
   object btnSend: TButton
     Left = 384
-    Top = 57
+    Top = 68
     Width = 97
     Height = 25
     Caption = 'Send'
@@ -111,11 +111,28 @@ object fMain: TfMain
   end
   object btnLogin: TButton
     Left = 384
-    Top = 26
+    Top = 9
     Width = 97
     Height = 25
     Caption = 'Login'
     TabOrder = 6
     OnClick = btnLoginClick
+  end
+  object btnLogout: TButton
+    Left = 384
+    Top = 37
+    Width = 97
+    Height = 25
+    Caption = 'Logout'
+    Enabled = False
+    TabOrder = 7
+    OnClick = btnLogoutClick
+  end
+  object TKeepAliveTimer: TTimer
+    Enabled = False
+    Interval = 420000
+    OnTimer = TKeepAliveTimerTimer
+    Left = 488
+    Top = 72
   end
 end

@@ -12,7 +12,8 @@ uses
   IdSSLOpenSSL,
   IdHttp,
 
-  JsonRpc;
+  uAuthCalls,
+  JsonRpc, Vcl.ExtCtrls;
 
 type
   TfMain = class(TForm)
@@ -29,11 +30,15 @@ type
     gbPrepopulateInstructions: TGroupBox;
     cbScenario: TComboBox;
     btnLogin: TButton;
+    TKeepAliveTimer: TTimer;
+    btnLogout: TButton;
     procedure btnSendClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbScenarioChange(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnLoginClick(Sender: TObject);
+    procedure TKeepAliveTimerTimer(Sender: TObject);
+    procedure btnLogoutClick(Sender: TObject);
   private
     { Private declarations }
     FScenarioData: TStringList;
@@ -67,9 +72,25 @@ begin
   fAuthForm := TfAuthForm.Create(nil);
   try
     mrAuth := fAuthForm.ShowModal;
-    if mrAuth = mrOK then eSessionToken.Text := fAuthForm.SessionToken;
+    if mrAuth = mrOK then
+    begin
+      eSessionToken.Text := fAuthForm.SessionToken;
+      TKeepAliveTimer.Enabled := true;
+      btnLogout.Enabled := true;
+      btnLogin.Enabled := false;
+    end;
   finally
     fAuthForm.Free;
+  end;
+end;
+
+procedure TfMain.btnLogoutClick(Sender: TObject);
+begin
+  if DoLogOut(eSessionToken.Text) then
+  begin
+    eSessionToken.Text := '';
+    btnLogin.Enabled := true;
+    btnLogout.Enabled := false;
   end;
 end;
 
@@ -135,6 +156,15 @@ begin
       if cbOperation.Items[i] = scenarioData['methodName'].AsString then indexOfOperation := i;
     end;
     cbOperation.ItemIndex := indexOfOperation;
+  end;
+end;
+
+procedure TfMain.TKeepAliveTimerTimer(Sender: TObject);
+begin
+  // Keep alive runs every 7 minutes
+  if Length(eSessionToken.Text) > 1 then
+  begin
+    DoKeepAlive(eSessionToken.Text);
   end;
 end;
 

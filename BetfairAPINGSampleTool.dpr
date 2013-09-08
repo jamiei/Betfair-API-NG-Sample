@@ -6,7 +6,8 @@ uses
   uConfig in 'uConfig.pas',
   JsonRpc in 'JsonRpc.pas',
   uAuthForm in 'uAuthForm.pas' {fAuthForm},
-  AppNsHandler in 'lib\AppNsHandler.pas';
+  AppNsHandler in 'lib\AppNsHandler.pas',
+  uAuthCalls in 'uAuthCalls.pas';
 
 {$R *.res}
 
