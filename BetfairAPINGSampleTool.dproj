@@ -90,6 +90,12 @@
 			</DCCReference>
 			<DCCReference Include="uConfig.pas"/>
 			<DCCReference Include="JsonRpc.pas"/>
+			<DCCReference Include="uAuthForm.pas">
+				<Form>fAuthForm</Form>
+				<FormType>dfm</FormType>
+			</DCCReference>
+			<DCCReference Include="lib\AppNsHandler.pas"/>
+			<DCCReference Include="uAuthCalls.pas"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
