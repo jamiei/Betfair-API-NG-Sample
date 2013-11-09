@@ -32,6 +32,7 @@ type
     btnLogin: TButton;
     TKeepAliveTimer: TTimer;
     btnLogout: TButton;
+    btnCertLogin: TButton;
     procedure btnSendClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbScenarioChange(Sender: TObject);
@@ -39,6 +40,7 @@ type
     procedure btnLoginClick(Sender: TObject);
     procedure TKeepAliveTimerTimer(Sender: TObject);
     procedure btnLogoutClick(Sender: TObject);
+    procedure btnCertLoginClick(Sender: TObject);
   private
     { Private declarations }
     FScenarioData: TStringList;
@@ -60,9 +62,36 @@ implementation
 
 uses
   uConfig,
-  uAuthForm;
+  uAuthForm,
+  uCertLogin;
 
 {$R *.dfm}
+
+procedure TfMain.btnCertLoginClick(Sender: TObject);
+var
+  fCertLogin: TfCertLogin;
+  mrAuth: TModalResult;
+  result: TCertLoginResponse;
+begin
+  fCertLogin := TfCertLogin.Create(nil);
+  try
+    mrAuth := fCertLogin.ShowModal;
+    if mrAuth = mrOK then
+    begin
+      result := DoCertLogin(eAppKey.Text, fCertLogin.eUsername.Text, fCertLogin.ePassword.Text, fCertLogin.eCertFile.Text, fCertLogin.eKeyFile.Text);
+      if result.IsLoggedIn then
+      begin
+        eSessionToken.Text := result.SessionToken;
+        TKeepAliveTimer.Enabled := true;
+        btnLogout.Enabled := true;
+        btnLogin.Enabled := false;
+        btnCertLogin.Enabled := false;
+      end else ShowMessage('ERROR: ' + result.ReturnCode);
+    end;
+  finally
+    fCertLogin.Free;
+  end;
+end;
 
 procedure TfMain.btnLoginClick(Sender: TObject);
 var
@@ -78,6 +107,7 @@ begin
       TKeepAliveTimer.Enabled := true;
       btnLogout.Enabled := true;
       btnLogin.Enabled := false;
+      btnCertLogin.Enabled := false;
     end;
   finally
     fAuthForm.Free;
@@ -90,6 +120,7 @@ begin
   begin
     eSessionToken.Text := '';
     btnLogin.Enabled := true;
+    btnCertLogin.Enabled := true;
     btnLogout.Enabled := false;
   end else ShowMessage('Logout Failed!');
 end;

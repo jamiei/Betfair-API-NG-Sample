@@ -2,7 +2,7 @@
 This project is a demo tool, intended to provide example usage of requests to [Betfair's API-NG](https://api.developer.betfair.com/services/webapps/docs/display/1smk3cen4v3lu3yomq5qye0ni/Betting+API+Home). 
 Addtionally, this project provides sample code for connecting to Betfair API-NG from Delphi using Indy 10. This project was built for Delphi XE2, but should be backwards compatible with post Delphi 2009 versions. This sample tool logs all requests and responses to a response log in the same folder as the application executable for educational purposes. 
 
-**Please note:** You will need to provide your own Application Key in order to use this sample tool.
+**Please note:** You will need to provide your own Application Key in order to use this sample tool. You will also need to download the SSL binaries from [Indy](http://indy.fulgan.com/SSL/) and place them in the directory with the Appplication binaries.
 
 ## Configuration
 
@@ -47,6 +47,7 @@ end;
 ```
 
 ![Screenshot of the Sample Tool](http://jamiei.com/blog/wp-content/uploads/2013/09/screenshot.png)
+![Screenshot of the Certificate login](http://jamiei.com/blog/wp-content/uploads/2013/11/CertAuth.png)
 
 ## Dependencies
 Due to distribution restrictions, there are a couple of dependencies that you must fulfil:

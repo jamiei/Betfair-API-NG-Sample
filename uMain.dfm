@@ -110,9 +110,9 @@ object fMain: TfMain
     end
   end
   object btnLogin: TButton
-    Left = 384
-    Top = 9
-    Width = 97
+    Left = 351
+    Top = 8
+    Width = 79
     Height = 25
     Caption = 'Login'
     TabOrder = 6
@@ -127,6 +127,15 @@ object fMain: TfMain
     Enabled = False
     TabOrder = 7
     OnClick = btnLogoutClick
+  end
+  object btnCertLogin: TButton
+    Left = 436
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = 'Cert Login'
+    TabOrder = 8
+    OnClick = btnCertLoginClick
   end
   object TKeepAliveTimer: TTimer
     Enabled = False
