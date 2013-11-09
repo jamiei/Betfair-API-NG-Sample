@@ -86,12 +86,12 @@ end;
 
 procedure TfMain.btnLogoutClick(Sender: TObject);
 begin
-  if DoLogOut(eSessionToken.Text) then
+  if DoLogOut(eAppKey.Text, eSessionToken.Text) then
   begin
     eSessionToken.Text := '';
     btnLogin.Enabled := true;
     btnLogout.Enabled := false;
-  end;
+  end else ShowMessage('Logout Failed!');
 end;
 
 procedure TfMain.btnSendClick(Sender: TObject);
@@ -164,8 +164,8 @@ begin
   // Keep alive runs every 7 minutes
   if Length(eSessionToken.Text) > 1 then
   begin
-    DoKeepAlive(eSessionToken.Text);
-  end;
+    DoKeepAlive(eAppkey.Text, eSessionToken.Text);
+  end else ShowMessage('Keep Alive failed.');
 end;
 
 procedure TfMain.FormCreate(Sender: TObject);
