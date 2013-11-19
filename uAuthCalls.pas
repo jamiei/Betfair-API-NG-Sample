@@ -30,19 +30,21 @@ var
   httpClient: TIdHttp;
   sslHandler: TIdSSLIOHandlerSocketOpenSSL;
   jsonResp: ISuperObject;
+  rawResp: string;
 begin
   result := false;
   httpClient := TIdHttp.Create(nil);
   try
     sslHandler := TIdSSLIOHandlerSocketOpenSSL.Create;
     try
+      httpClient.IOHandler := sslHandler;
       httpClient.Request.CustomHeaders.AddValue('X-Application', aAppKey);
       httpClient.Request.CustomHeaders.AddValue('X-Authentication', aSessionToken);
       httpClient.Request.Accept := 'application/json';
-      httpClient.Get('https://identitysso.betfair.com/api/keepAlive');
+      rawResp := httpClient.Get('https://identitysso.betfair.com/api/keepAlive');
       if httpClient.ResponseCode = 200 then
       begin
-        jsonResp := SO(httpClient.ResponseText);
+        jsonResp := SO(rawResp);
         if jsonResp.S['status'] = 'SUCCESS' then result := true else result := false;
       end;
     except
@@ -59,19 +61,21 @@ var
   httpClient: TIdHttp;
   sslHandler: TIdSSLIOHandlerSocketOpenSSL;
   jsonResp: ISuperObject;
+  rawResp: string;
 begin
   result := false;
   httpClient := TIdHttp.Create(nil);
   try
     sslHandler := TIdSSLIOHandlerSocketOpenSSL.Create;
     try
+      httpClient.IOHandler := sslHandler;
       httpClient.Request.CustomHeaders.AddValue('X-Application', aAppKey);
       httpClient.Request.CustomHeaders.AddValue('X-Authentication', aSessionToken);
       httpClient.Request.Accept := 'application/json';
-      httpClient.Get('https://identitysso.betfair.com/api/logout');
+      rawResp := httpClient.Get('https://identitysso.betfair.com/api/logout');
       if httpClient.ResponseCode = 200 then
       begin
-        jsonResp := SO(httpClient.ResponseText);
+        jsonResp := SO(rawResp);
         if jsonResp.S['status'] = 'SUCCESS' then result := true else result := false;
       end;
     except
