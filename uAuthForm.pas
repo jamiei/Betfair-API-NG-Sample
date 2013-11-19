@@ -45,6 +45,7 @@ uses
 
 procedure TfAuthForm.Button1Click(Sender: TObject);
 begin
+  // Registering this protocol curently does nothing. This is an example.
   wbAuth.Navigate('BfApp://test');
 end;
 
@@ -56,6 +57,7 @@ end;
 procedure TfAuthForm.FormShow(Sender: TObject);
 begin
   wbAuth.Navigate(ISSO_URL);
+  // Registering this protocol curently does nothing. This is an example.
   RegisterBfAppProtocol;
   Self.ModalResult := mrCancel;
 end;
@@ -86,6 +88,9 @@ var
   cookies: TStringList;
   urlStr: String;
 begin
+  { -----------------------
+  This needs updating to catch the POST to the redirect URL.
+    -----------------------}
   document := wbAuth.Document as IHTMLDocument2;
   if Assigned(document) then
   begin
