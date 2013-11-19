@@ -28,7 +28,7 @@ object fAuthForm: TfAuthForm
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
     OnProgressChange = wbAuthProgressChange
-    OnDocumentComplete = wbAuthDocumentComplete
+    OnBeforeNavigate2 = wbAuthBeforeNavigate2
     ExplicitWidth = 618
     ControlData = {
       4C000000844A0000232600000000000000000000000000000000000000000000

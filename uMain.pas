@@ -100,6 +100,7 @@ var
 begin
   fAuthForm := TfAuthForm.Create(nil);
   try
+    fAuthForm.AppKey := eAppKey.Text;
     mrAuth := fAuthForm.ShowModal;
     if mrAuth = mrOK then
     begin

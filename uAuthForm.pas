@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.OleCtrls, SHDocVw, Vcl.ComCtrls, MSHTML, UrlMon,
-  ComServ, ActiveX, ComObj, Vcl.StdCtrls;
+  ComServ, ActiveX, ComObj, Vcl.StdCtrls, IdURI;
 
 type
   TfAuthForm = class(TForm)
@@ -14,18 +14,20 @@ type
     procedure FormShow(Sender: TObject);
     procedure wbAuthProgressChange(ASender: TObject; Progress,
       ProgressMax: Integer);
-    procedure wbAuthDocumentComplete(ASender: TObject; const pDisp: IDispatch;
-      const URL: OleVariant);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure Button1Click(Sender: TObject);
+    procedure wbAuthBeforeNavigate2(ASender: TObject; const pDisp: IDispatch;
+      const URL, Flags, TargetFrameName, PostData, Headers: OleVariant;
+      var Cancel: WordBool);
   private
     { Private declarations }
     FSessionToken: string;
+    FAppKey: string;
     procedure RegisterBfAppProtocol;
     procedure UnregisterBfAppProtocol;
   public
     { Public declarations }
     property SessionToken: string read FSessionToken write FSessionToken;
+    property AppKey: string read FAppKey write FAppKey;
   end;
 
 var
@@ -34,7 +36,7 @@ var
   InternetSession: IInternetSession;
 
 const
-  ISSO_URL = 'https://identitysso.betfair.com';
+  ISSO_URL = 'https://identitysso.betfair.com/view/login?url=https://www.betfair.com&product=';
 
 implementation
 
@@ -43,12 +45,6 @@ implementation
 uses
   AppNsHandler;
 
-procedure TfAuthForm.Button1Click(Sender: TObject);
-begin
-  // Registering this protocol curently does nothing. This is an example.
-  wbAuth.Navigate('BfApp://test');
-end;
-
 procedure TfAuthForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   UnregisterBfAppProtocol;
@@ -56,7 +52,7 @@ end;
 
 procedure TfAuthForm.FormShow(Sender: TObject);
 begin
-  wbAuth.Navigate(ISSO_URL);
+  wbAuth.Navigate(ISSO_URL + FAppKey);
   // Registering this protocol curently does nothing. This is an example.
   RegisterBfAppProtocol;
   Self.ModalResult := mrCancel;
@@ -81,32 +77,55 @@ begin
   if (Factory <> nil) then Factory := nil;
 end;
 
-procedure TfAuthForm.wbAuthDocumentComplete(ASender: TObject;
-  const pDisp: IDispatch; const URL: OleVariant);
+procedure TfAuthForm.wbAuthBeforeNavigate2(ASender: TObject;
+  const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+  Headers: OleVariant; var Cancel: WordBool);
+  function OleVariantToMemoryStream(OV: OleVariant): TMemoryStream;
+   var
+     Data: PByteArray;
+     Size: integer;
+   begin
+     Result := TMemoryStream.Create;
+     try
+        Size := VarArrayHighBound (OV, 1) - VarArrayLowBound(OV, 1) + 1;
+        Data := VarArrayLock(OV) ;
+        try
+          Result.Position := 0;
+          Result.WriteBuffer(Data^, Size) ;
+        finally
+          VarArrayUnlock(OV) ;
+        end;
+     except
+        Result.Free;
+        Result := nil;
+     end;
+   end;
 var
-  document: IHTMLDocument2;
-  cookies: TStringList;
-  urlStr: String;
+   ms: TMemoryStream;
+   ss: TStringStream;
+   params: TStringList;
 begin
-  { -----------------------
-  This needs updating to catch the POST to the redirect URL.
-    -----------------------}
-  document := wbAuth.Document as IHTMLDocument2;
-  if Assigned(document) then
-  begin
-    urlStr := document.url;
-    cookies := TStringList.Create;
-    cookies.Delimiter := ';';
-    try
-      cookies.DelimitedText := document.cookie;
-      if ((urlStr = 'https://identitysso.betfair.com/api/login') and (Length(cookies.Values['ssoid']) > 5)) then
+  ss := TStringStream.Create('');
+  params := TStringList.Create;
+  try
+    if (URL = 'https://www.betfair.com/') and (Length(PostData) > 0) then
+    begin
+      ms := OleVariantToMemoryStream(PostData);
+      ms.Position := 0;
+      ss.CopyFrom(ms, ms.size);
+      ss.Position := 0;
+
+      params.Delimiter := '&';
+      params.DelimitedText := ss.DataString;
+      if params.Values['loginStatus'] = TIdURI.URLDecode('SUCCESS') then
       begin
-        FSessionToken := cookies.Values['ssoid'];
+        FSessionToken := TIdURI.URLDecode(params.Values['productToken']);
         Self.ModalResult := mrOK;
       end;
-    finally
-      cookies.Free;
     end;
+  finally
+    params.Free;
+    ss.Free;
   end;
 end;
 
