@@ -212,6 +212,7 @@ begin
   FEndpoints.CommaText := TAPINGMethodConfig.LoadEndpoint(iniFilename);
   FJsonRpc := TJsonRpc.Create(FEndpoints);
   methodNames := TAPINGMethodConfig.LoadMethodNames(iniFilename);
+  eAppKey.Text := TAPINGMethodConfig.LoadSavedAppKey(iniFilename);
   try
     cbOperation.Items.AddStrings(methodNames);
   finally
@@ -222,7 +223,11 @@ begin
 end;
 
 procedure TfMain.FormDestroy(Sender: TObject);
+var
+  iniFilename: string;
 begin
+  iniFilename := ChangeFileExt(Application.ExeName,'.ini');
+  TAPINGMethodConfig.SaveAppKey(iniFilename, eAppKey.Text);
   FScenarioData.Clear;
   FScenarioData.Free;
   FJsonRpc.Free;
