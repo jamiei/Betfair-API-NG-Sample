@@ -46,6 +46,7 @@ type
     FScenarioData: TStringList;
     FEndpoints: TStringList;
     FJsonRpc: TJsonRpc;
+    FKeepAliveFailCount: integer;
     // Form population methods
     procedure loadScenarioData(aFilename: string);
     procedure populateScenarioData(aSelectedIndex: integer);
@@ -123,6 +124,8 @@ begin
     btnLogin.Enabled := true;
     btnCertLogin.Enabled := true;
     btnLogout.Enabled := false;
+    TKeepAliveTimer.Enabled := false;
+    FKeepAliveFailCount := 0;
   end else ShowMessage('Logout Failed!');
 end;
 
@@ -197,7 +200,16 @@ begin
   if Length(eSessionToken.Text) > 1 then
   begin
     DoKeepAlive(eAppkey.Text, eSessionToken.Text);
-  end else ShowMessage('Keep Alive failed.');
+  end
+  else
+  begin
+    Inc(FKeepAliveFailCount);
+    if FKeepAliveFailCount > 7 then
+    begin
+      TKeepAliveTimer.Enabled := false;
+      ShowMessage('The Keep Alive operation has failed more than 7 times now and has been disabled.');
+    end;
+  end;
 end;
 
 procedure TfMain.FormCreate(Sender: TObject);
@@ -206,6 +218,7 @@ var
   iniFilename: string;
 begin
   FScenarioData := TStringList.Create;
+  FKeepAliveFailCount := 0;
   // Load ini config
   iniFilename := ChangeFileExt(Application.ExeName,'.ini');
   FEndpoints := TStringList.Create;
